@@ -1,10 +1,12 @@
 'use client'
 
 import Link from 'next/link'
+
 import type { ModeId } from '@mathviz/shared'
+
 import { ROUTES } from '@/config/routes'
-import { useAuthStore } from '@/store/auth.store'
 import { useTranslation } from '@/i18n/useTranslation'
+import { useAuthStore } from '@/store/auth.store'
 
 interface QuizButtonClientProps {
   modeId: ModeId

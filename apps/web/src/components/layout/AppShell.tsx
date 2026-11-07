@@ -1,12 +1,11 @@
 'use client'
 
-import { useEffect, useState, type ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
-
-import { useTranslation } from '@/i18n/useTranslation'
-import { cn } from '@/lib/cn'
+import { useEffect, useState, type ReactNode } from 'react'
 
 import { NavIcon } from '@/components/icons/NavIcons'
+import { useTranslation } from '@/i18n/useTranslation'
+import { cn } from '@/lib/cn'
 
 import { Footer } from './Footer'
 import { LanguageSwitcher } from './LanguageSwitcher'

@@ -4,9 +4,9 @@ import { notFound } from 'next/navigation'
 import { MODES } from '@mathviz/shared'
 import type { ModeId } from '@mathviz/shared'
 
-import { CalculatorShell } from '@/features/calculators/components/CalculatorShell'
 import { ModeSelector } from '@/components/calculators/ModeSelector'
 import { QuizButtonClient } from '@/components/calculators/QuizButtonClient'
+import { CalculatorShell } from '@/features/calculators/components/CalculatorShell'
 import en from '@/i18n/en.json'
 import { getTranslation } from '@/i18n/getTranslation'
 

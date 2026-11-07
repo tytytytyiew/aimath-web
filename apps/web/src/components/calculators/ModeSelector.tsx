@@ -1,11 +1,13 @@
 'use client'
 
-import { useAuthStore } from '@/store/auth.store'
 import Link from 'next/link'
+
 import { MODES } from '@mathviz/shared'
 import type { ModeId } from '@mathviz/shared'
+
 import { ROUTES } from '@/config/routes'
 import { useTranslation } from '@/i18n/useTranslation'
+import { useAuthStore } from '@/store/auth.store'
 
 interface ModeSelectorProps {
   activeModeId: ModeId

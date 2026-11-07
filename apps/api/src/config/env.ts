@@ -10,6 +10,17 @@ const apiEnvPath = resolve(currentDir, '../../.env')
 config({ path: rootEnvPath })
 config({ path: apiEnvPath })
 
+const frontendOriginsSchema = z.preprocess(
+  (value) => {
+    if (typeof value !== 'string') return value
+    return value
+      .split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean)
+  },
+  z.array(z.string().url('FRONTEND_ORIGIN must contain valid URLs')).min(1),
+)
+
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(8080),
@@ -17,7 +28,7 @@ const envSchema = z.object({
   JWT_ACCESS_SECRET: z.string().min(32, 'JWT_ACCESS_SECRET must be at least 32 characters'),
   JWT_REFRESH_SECRET: z.string().min(32, 'JWT_REFRESH_SECRET must be at least 32 characters'),
   BCRYPT_ROUNDS: z.coerce.number().int().min(10).max(14).default(12),
-  FRONTEND_ORIGIN: z.string().url('FRONTEND_ORIGIN must be a valid URL'),
+  FRONTEND_ORIGIN: frontendOriginsSchema,
 })
 
 function loadEnv() {

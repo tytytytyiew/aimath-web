@@ -8,7 +8,7 @@ import { LanguageSwitcher } from './LanguageSwitcher'
 function renderSwitcher(variant?: 'pill' | 'compact') {
   return render(
     <I18nProvider>
-      <LanguageSwitcher variant={variant} />
+      <LanguageSwitcher {...(variant ? { variant } : {})} />
     </I18nProvider>,
   )
 }

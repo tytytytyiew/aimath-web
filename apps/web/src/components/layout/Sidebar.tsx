@@ -10,7 +10,6 @@ import {
   MAIN_NAV,
   TOPICS_NAV,
   sectionHasActive,
-  topicHasActive,
   type NavItem,
   type TopicNavItem,
 } from '@/config/navigation'

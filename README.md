@@ -37,6 +37,7 @@ pnpm install
 ```bash
 cp .env.example apps/api/.env
 # Edit apps/api/.env with your DATABASE_URL and JWT secrets
+# Frontend origins can be a comma-separated list, e.g. http://localhost:3000,http://localhost:3001
 ```
 
 ### 3. Run the development servers
