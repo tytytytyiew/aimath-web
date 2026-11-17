@@ -12,6 +12,11 @@ import { usersRouter } from './modules/users/users.router.js'
 
 export const app = express()
 
+// Behind Vercel's proxy: trust the first X-Forwarded-For hop (needed by express-rate-limit)
+if (process.env['VERCEL']) {
+  app.set('trust proxy', 1)
+}
+
 app.use(helmet())
 app.use(
   cors({
@@ -40,8 +45,8 @@ app.use((_req, res) => {
 
 app.use(errorHandler)
 
-// Only listen when not in test mode
-if (env.NODE_ENV !== 'test') {
+// Only listen when not in test mode and not running as a Vercel function
+if (env.NODE_ENV !== 'test' && !process.env['VERCEL']) {
   const PORT = env.PORT
   app.listen(PORT, () => {
     console.log(`API server listening on http://localhost:${PORT}`)

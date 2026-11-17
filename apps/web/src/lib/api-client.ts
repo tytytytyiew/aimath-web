@@ -2,7 +2,9 @@ import type { ApiErrorCode } from '@mathviz/shared'
 
 import { getAccessToken, setAccessToken } from './token'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080'
+// Empty by default: the browser calls same-origin /api/v1/* and next.config.ts
+// proxies it to the API (API_PROXY_TARGET). Set NEXT_PUBLIC_API_URL to bypass the proxy.
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? ''
 
 export interface ApiError {
   code: ApiErrorCode

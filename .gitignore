@@ -24,3 +24,4 @@ coverage/
 Thumbs.db
 
 # pnpm lockfile is committed — do NOT add pnpm-lock.yaml here
+.vercel
