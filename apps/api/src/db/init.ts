@@ -23,52 +23,57 @@ if (!DATABASE_URL) {
 }
 
 async function initDatabase() {
-  const url = new URL(DATABASE_URL)
-  const dbName = url.pathname.slice(1) // Remove leading /
-  const adminUrl = new URL(DATABASE_URL)
-  adminUrl.pathname = '/postgres' // Connect to default postgres database
-
-  const pool = new Pool({ connectionString: adminUrl.toString() })
-
   try {
-    // Check if database exists
-    const result = await pool.query(`SELECT 1 FROM pg_database WHERE datname = $1`, [dbName])
+    const url = new URL(DATABASE_URL)
+    const dbName = url.pathname.slice(1) // Remove leading /
+    const adminUrl = new URL(DATABASE_URL)
+    adminUrl.pathname = '/postgres' // Connect to default postgres database
 
-    if (result.rows.length === 0) {
-      console.log(`[db] Creating database: ${dbName}`)
-      await pool.query(`CREATE DATABASE "${dbName}"`)
-      console.log(`[db] ✓ Database created`)
-    } else {
-      console.log(`[db] Database already exists: ${dbName}`)
+    const pool = new Pool({ connectionString: adminUrl.toString() })
+
+    try {
+      // Check if database exists
+      const result = await pool.query(`SELECT 1 FROM pg_database WHERE datname = $1`, [dbName])
+
+      if (result.rows.length === 0) {
+        console.log(`[db] Creating database: ${dbName}`)
+        await pool.query(`CREATE DATABASE "${dbName}"`)
+        console.log(`[db] ✓ Database created`)
+      } else {
+        console.log(`[db] Database already exists: ${dbName}`)
+      }
+    } finally {
+      await pool.end()
     }
-  } finally {
-    await pool.end()
-  }
 
-  // Run migrations
-  console.log(`[db] Running migrations…`)
-  try {
-    execSync('drizzle-kit migrate', {
-      cwd: resolve(currentDir, '../..'),
-      stdio: 'inherit',
-    })
-    console.log(`[db] ✓ Migrations complete`)
-  } catch (err) {
-    console.error(`[db] ✗ Migration failed:`, err)
-    throw err
-  }
+    // Run migrations
+    console.log(`[db] Running migrations…`)
+    try {
+      execSync('drizzle-kit migrate', {
+        cwd: resolve(currentDir, '../..'),
+        stdio: 'inherit',
+      })
+      console.log(`[db] ✓ Migrations complete`)
+    } catch (err) {
+      console.error(`[db] ✗ Migration failed:`, err)
+      throw err
+    }
 
-  // Seed database
-  console.log(`[db] Seeding database…`)
-  try {
-    execSync('tsx src/db/seed.ts', {
-      cwd: resolve(currentDir, '../..'),
-      stdio: 'inherit',
-    })
-    console.log(`[db] ✓ Database initialized and seeded`)
+    // Seed database
+    console.log(`[db] Seeding database…`)
+    try {
+      execSync('tsx src/db/seed.ts', {
+        cwd: resolve(currentDir, '../..'),
+        stdio: 'inherit',
+      })
+      console.log(`[db] ✓ Database initialized and seeded`)
+    } catch (err) {
+      console.error(`[db] ✗ Seeding failed:`, err)
+      throw err
+    }
   } catch (err) {
-    console.error(`[db] ✗ Seeding failed:`, err)
-    throw err
+    console.warn('[db] PostgreSQL is unavailable; continuing in demo mode without a database.')
+    console.warn(err instanceof Error ? err.message : String(err))
   }
 }
 

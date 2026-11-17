@@ -98,6 +98,7 @@ describe('POST /api/v1/auth/login', () => {
     expect(res.status).toBe(200)
     expect(res.body.accessToken).toBe('mock-access-token')
     expect(res.body.user).toMatchObject({ email: 'alice@example.com' })
+    expect(res.headers['set-cookie'][0]).toContain('SameSite=Lax')
   })
 
   it('returns 401 on wrong password (AUTH_INVALID_CREDENTIALS)', async () => {
